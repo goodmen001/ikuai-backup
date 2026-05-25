@@ -1,0 +1,7 @@
+flask>=3.0
+flask-cors>=4.0
+requests>=2.31
+apscheduler>=3.10
+pytz>=2023.3
+waitress>=2.1
+pyOpenSSL>=23.0
