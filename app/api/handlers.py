@@ -86,6 +86,16 @@ class APIHandler:
 
     # ── Backup actions ──
     def run_backup(self):
+        if not getattr(self.ctx, "_ikuai_url", "") or not getattr(self.ctx, "_ikuai_username", ""):
+            return {"success": False, "message": "iKuai配置不完整，请先在配置页填写路由地址和登录信息"}
+        if not getattr(self.ctx, "_ikuai_password", ""):
+            return {"success": False, "message": "iKuai密码未配置"}
+        lock = getattr(self.ctx, "_lock", None)
+        if lock and lock.locked():
+            return {"success": False, "message": "备份任务正在执行中，请等待完成"}
+        g_lock = getattr(self.ctx, "_global_task_lock", None)
+        if g_lock and g_lock.locked():
+            return {"success": False, "message": "其他任务正在执行中，请等待完成"}
         threading.Thread(target=self.ctx.backup_executor.run_backup_job, daemon=True).start()
         return {"success": True, "message": "备份任务已启动"}
 
