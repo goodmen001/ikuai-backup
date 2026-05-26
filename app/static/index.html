@@ -140,6 +140,13 @@ tr:hover{background:#f5f8ff}
     <button class="btn btn-primary" onclick="runBackup()">▶ 立即备份</button>
     <button class="btn btn-warning" onclick="stopTasks()">⏹ 停止任务</button>
   </div>
+  <div class="card">
+    <h3>最近备份记录</h3>
+    <div class="scroll-table">
+      <table><thead><tr><th>时间</th><th>文件名</th><th>状态</th><th>信息</th></tr></thead>
+      <tbody id="dash-history"></tbody></table>
+    </div>
+  </div>
 </div>
 
 <!-- Config -->
@@ -448,13 +455,20 @@ document.querySelectorAll(".tab").forEach(tab=>{
 
 // Dashboard
 async function loadDashboard() {
-  const d = await api("GET","/dashboard_data");
+  const [d, h] = await Promise.all([api("GET","/dashboard_data"), api("GET","/backup_history")]);
   if (!d) return;
   document.getElementById("dash-total").textContent = d.backup_stats?.total || 0;
   document.getElementById("dash-ok").textContent = d.backup_stats?.successful || 0;
   document.getElementById("dash-fail").textContent = d.backup_stats?.failed || 0;
   document.getElementById("dash-local").textContent = d.available_backups?.local || 0;
   document.getElementById("dash-webdav").textContent = d.available_backups?.webdav || 0;
+  const tbody = document.getElementById("dash-history");
+  if (!tbody) return;
+  if (!Array.isArray(h) || h.length===0) { tbody.innerHTML="<tr><td colspan='4' class='text-center'>暂无记录</td></tr>"; return; }
+  tbody.innerHTML = h.slice(0,10).map(e=>{
+    const ts = e.timestamp ? new Date(e.timestamp*1000).toLocaleString() : "-";
+    return `<tr><td>${ts}</td><td>${e.filename||"-"}</td><td><span class="status-badge ${e.success?'success':'fail'}">${e.success?'成功':'失败'}</span></td><td>${e.message||""}</td></tr>`;
+  }).join("");
 }
 async function loadStatus() {
   const s = await api("GET","/status");
