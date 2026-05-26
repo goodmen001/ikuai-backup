@@ -6,67 +6,71 @@
 <title>iKuai 备份管理</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
-.app-header{background:#1a73e8;color:#fff;padding:16px 24px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 4px rgba(0,0,0,.2)}
-.app-header h1{font-size:20px;font-weight:600}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#e8ecf1 0%,#d5dce6 100%);color:#333;min-height:100vh}
+.app-header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,.15);position:sticky;top:0;z-index:100}
+.app-header h1{font-size:20px;font-weight:700;letter-spacing:.3px}
 .app-header .subtitle{font-size:13px;opacity:.8;margin-left:auto}
-.tabs{display:flex;background:#fff;border-bottom:1px solid #ddd;padding:0 16px;position:sticky;top:0;z-index:10;overflow-x:auto}
-.tab{padding:12px 20px;cursor:pointer;border-bottom:2px solid transparent;color:#666;font-size:14px;transition:.2s;white-space:nowrap}
+.tabs{display:flex;background:#fff;border-bottom:1px solid #ddd;padding:0 16px;position:sticky;top:58px;z-index:99;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab{padding:12px 20px;cursor:pointer;border-bottom:2px solid transparent;color:#666;font-size:13px;transition:all .2s;white-space:nowrap}
 .tab:hover{color:#1a73e8;background:#f5f8ff}
 .tab.active{color:#1a73e8;border-bottom-color:#1a73e8;font-weight:600}
-.tab-content{display:none;padding:20px;max-width:1200px;margin:0 auto}
+.tab-content{display:none;padding:16px 20px;max-width:1200px;margin:0 auto}
 .tab-content.active{display:block}
-.card{background:#fff;border-radius:8px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.1);margin-bottom:16px}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px;transition:box-shadow .2s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1)}
 .card h3{font-size:15px;margin-bottom:12px;color:#555;border-bottom:1px solid #eee;padding-bottom:8px}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
-.stat-box{text-align:center;padding:16px;border-radius:8px;background:#f8f9fa}
+.stat-box{text-align:center;padding:16px 12px;border-radius:12px;background:linear-gradient(135deg,#f8f9fa,#eef1f5);transition:transform .2s,box-shadow .2s}
+.stat-box:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
 .stat-box .num{font-size:28px;font-weight:700;color:#1a73e8;display:block}
 .stat-box .label{font-size:12px;color:#888;margin-top:4px}
+.stat-box.success{background:linear-gradient(135deg,#f0fff4,#fff)}
 .stat-box.success .num{color:#34a853}
+.stat-box.fail{background:linear-gradient(135deg,#fff5f5,#fff)}
 .stat-box.fail .num{color:#ea4335}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:13px;color:#555;margin-bottom:4px;font-weight:500}
-.form-group input,.form-group select{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:4px;font-size:14px;transition:.2s}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:#1a73e8;box-shadow:0 0 0 2px rgba(26,115,232,.15)}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:12px;color:#555;margin-bottom:3px;font-weight:600}
+.form-group input,.form-group select{width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;transition:border-color .2s,box-shadow .2s}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:#1a73e8;box-shadow:0 0 0 3px rgba(26,115,232,.12)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .form-group-check{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .form-group-check label{font-size:13px;color:#555;cursor:pointer}
-.btn{padding:8px 20px;border:none;border-radius:4px;cursor:pointer;font-size:14px;transition:.2s;font-weight:500}
-.btn-primary{background:#1a73e8;color:#fff}
-.btn-primary:hover{background:#1557b0}
-.btn-success{background:#34a853;color:#fff}
-.btn-success:hover{background:#2d9249}
-.btn-danger{background:#ea4335;color:#fff}
-.btn-danger:hover{background:#c5221f}
-.btn-warning{background:#f9ab00;color:#fff}
-.btn-warning:hover{background:#e09500}
-.btn:disabled{opacity:.6;cursor:not-allowed}
-.btn-sm{padding:6px 14px;font-size:12px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,#1a73e8,#4791db);color:#fff;box-shadow:0 2px 8px rgba(26,115,232,.3)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,115,232,.4)}
+.btn-success{background:linear-gradient(135deg,#34a853,#5cbf78);color:#fff;box-shadow:0 2px 8px rgba(52,168,83,.3)}
+.btn-success:hover{transform:translateY(-1px)}
+.btn-danger{background:linear-gradient(135deg,#ea4335,#ff6b6b);color:#fff;box-shadow:0 2px 8px rgba(234,67,53,.3)}
+.btn-danger:hover{transform:translateY(-1px)}
+.btn-warning{background:linear-gradient(135deg,#f9ab00,#f1c40f);color:#fff}
+.btn-warning:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:6px}
 .toggle-header{cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:600;font-size:14px;color:#333;border-top:1px solid #eee}
 .toggle-header:hover{color:#1a73e8}
 .toggle-header .arrow{font-size:12px;transition:.2s}
 .toggle-body{padding:8px 0 0 24px}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #eee}
-th{background:#f8f9fa;color:#555;font-weight:600;position:sticky;top:0}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #f0f0f0}
+th{background:#f8f9fa;color:#888;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0}
 tr:hover{background:#f5f8ff}
-.status-badge{padding:2px 8px;border-radius:10px;font-size:12px}
-.status-badge.success{background:#e6f4ea;color:#34a853}
-.status-badge.fail{background:#fce8e6;color:#ea4335}
+.status-badge{padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.status-badge.success{background:#d4edda;color:#155724}
+.status-badge.fail{background:#f8d7da;color:#721c24}
 .status-badge.running{background:#e8f0fe;color:#1a73e8}
-.toast{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:6px;color:#fff;font-size:14px;z-index:9999;animation:slideIn .3s;max-width:400px}
-.toast.success{background:#34a853}
-.toast.error{background:#ea4335}
-.toast.info{background:#1a73e8}
-@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
-.scroll-table{overflow-x:auto;max-height:500px;overflow-y:auto}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;padding:10px 24px;border-radius:10px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:toastIn .3s;max-width:90%}
+.toast.success{background:linear-gradient(135deg,#34a853,#5cbf78)}
+.toast.error{background:linear-gradient(135deg,#ea4335,#ff6b6b)}
+.toast.info{background:linear-gradient(135deg,#1a73e8,#4791db)}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.scroll-table{overflow-x:auto;-webkit-overflow-scrolling:touch;max-height:500px;overflow-y:auto}
 .hidden{display:none!important}
 .status-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-.status-item{padding:10px 16px;background:#f8f9fa;border-radius:6px;font-size:13px}
+.status-item{padding:10px 16px;background:linear-gradient(135deg,#f8f9fa,#eef1f5);border-radius:8px;font-size:13px}
 .status-item .tag{color:#888;margin-right:6px}
 .status-item .val{font-weight:600;color:#333}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:768px){.form-row,.grid-2{grid-template-columns:1fr}}
 .mt-12{margin-top:12px}
 .mb-12{margin-bottom:12px}
 .flex{display:flex;align-items:center;gap:8px}
@@ -74,18 +78,51 @@ tr:hover{background:#f5f8ff}
 .justify-between{justify-content:space-between}
 .text-center{text-align:center}
 /* Login overlay */
-.login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);z-index:9999;justify-content:center;align-items:center}
-.login-box{background:#fff;border-radius:12px;padding:40px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.login-box h1{font-size:22px;text-align:center;margin-bottom:8px;color:#1a73e8}
-.login-box .sub{text-align:center;color:#888;font-size:13px;margin-bottom:28px}
+.login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);z-index:9999;justify-content:center;align-items:center}
+.login-box{background:#fff;border-radius:16px;padding:36px 32px;width:90%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeIn .4s}
+.login-box h1{font-size:22px;text-align:center;margin-bottom:6px;color:#1a73e8}
+.login-box .sub{text-align:center;color:#888;font-size:13px;margin-bottom:24px}
 .login-box .error{color:#e74c3c;font-size:13px;text-align:center;margin-bottom:12px;display:none}
 .login-box .form-group{margin-bottom:16px}
 .login-box .form-group label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:4px}
-.login-box .form-group input{width:100%;padding:10px 14px;border:2px solid #eee;border-radius:8px;font-size:14px;transition:.2s}
-.login-box .form-group input:focus{border-color:#1a73e8;outline:none}
-.login-box .btn{width:100%;padding:11px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:.2s}
-.login-box .btn:hover{background:#1557b0}
-.login-box .btn:disabled{opacity:.6;cursor:not-allowed}
+.login-box .form-group input{width:100%;padding:10px 14px;border:2px solid #eee;border-radius:10px;font-size:14px;transition:border-color .2s}
+.login-box .form-group input:focus{border-color:#1a73e8;outline:none;box-shadow:0 0 0 3px rgba(26,115,232,.1)}
+.login-box .btn{width:100%;padding:11px;background:linear-gradient(135deg,#1a73e8,#4791db);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(26,115,232,.3)}
+.login-box .btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(26,115,232,.4)}
+.login-box .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+/* Modal overlay */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);z-index:200;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;padding:24px;max-width:500px;width:92%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal h3{margin-bottom:16px;font-size:16px}
+/* Mobile responsive */
+@media(max-width:768px){
+  body{background:#eef1f5}
+  .app-header{padding:12px 16px}
+  .app-header h1{font-size:17px}
+  .tabs{padding:0 8px;top:52px}
+  .tab{padding:10px 14px;font-size:12px}
+  .tab-content{padding:12px}
+  .card{padding:14px;border-radius:10px}
+  .stat-box{padding:12px 8px}
+  .stat-box .num{font-size:22px}
+  .modal{padding:20px}
+}
+@media(max-width:480px){
+  .app-header{padding:10px 12px}
+  .app-header h1{font-size:15px}
+  .app-header .subtitle{font-size:11px}
+  .tab{padding:8px 10px;font-size:11px}
+  .tab-content{padding:8px}
+  .card{padding:12px;margin-bottom:10px}
+  .card h3{font-size:14px}
+  th,td{padding:8px 6px;font-size:12px}
+  .stat-box .num{font-size:18px}
+  .btn{font-size:12px;padding:7px 14px;border-radius:6px}
+  .form-row,.grid-2{grid-template-columns:1fr}
+  .status-row{gap:8px}
+  .status-item{padding:8px 12px;font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -104,7 +141,7 @@ tr:hover{background:#f5f8ff}
 
 <div id="appContent" style="display:none">
 <div class="app-header">
-  <h1>📡 iKuai 路由备份管理</h1>
+  <h1>iKuai 路由备份管理</h1>
   <span class="subtitle">v1.0</span>
   <span style="cursor:pointer;color:#ffcc00;font-size:13px;margin-left:auto;margin-right:16px" onclick="showChangePassword()">修改密码</span>
   <span style="cursor:pointer;color:#ffcc00;font-size:13px" onclick="doLogout()">退出</span>
@@ -318,12 +355,12 @@ tr:hover{background:#f5f8ff}
 <div id="tab-status" class="tab-content">
   <button class="btn btn-primary mb-12" onclick="refreshSystemInfo()">🔄 刷新</button>
   <div class="grid-2">
-    <div class="card"><h3>系统信息</h3><div id="sysinfo-content">点击刷新加载...</div></div>
-    <div class="card"><h3>在线用户</h3><div id="online-content">点击刷新加载...</div></div>
+    <div class="card"><h3>系统信息</h3><div id="sysinfo-content">加载中...</div></div>
+    <div class="card"><h3>在线用户</h3><div id="online-content">加载中...</div></div>
   </div>
   <div class="grid-2">
-    <div class="card"><h3>实时流量</h3><div id="stream-content">点击刷新加载...</div></div>
-    <div class="card"><h3>接口信息</h3><div id="interface-content">点击刷新加载...</div></div>
+    <div class="card"><h3>实时流量</h3><div id="stream-content">加载中...</div></div>
+    <div class="card"><h3>接口信息</h3><div id="interface-content">加载中...</div></div>
   </div>
 </div>
 
@@ -371,6 +408,9 @@ tr:hover{background:#f5f8ff}
 
 <script>
 const API = "/api";
+
+// ── Tab state for auto-refresh ──
+let statusRefreshTimer = null;
 
 // ── Auth ──
 function showApp() {
@@ -443,13 +483,24 @@ function showToast(msg, type="info") {
   setTimeout(()=>t.remove(), 3500);
 }
 
-// Tabs
+// Tabs with auto-refresh
 document.querySelectorAll(".tab").forEach(tab=>{
   tab.addEventListener("click",()=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
     document.getElementById("tab-"+tab.dataset.tab).classList.add("active");
+
+    // Auto-refresh: status tab
+    if (tab.dataset.tab === 'status') {
+      refreshSystemInfo();
+      refreshInterface();
+      if (statusRefreshTimer) clearInterval(statusRefreshTimer);
+      statusRefreshTimer = setInterval(() => { refreshSystemInfo(); refreshInterface(); }, 15000);
+    } else if (statusRefreshTimer) {
+      clearInterval(statusRefreshTimer);
+      statusRefreshTimer = null;
+    }
   });
 });
 
@@ -580,8 +631,8 @@ async function refreshBackups() {
     return;
   }
   tbody.innerHTML = list.map(b=>{
-    const delBtn = `<button class="btn btn-danger" style="padding:4px 10px;font-size:12px" onclick="deleteBackup('${b.filename}','${b.source}')">删除</button>`;
-    const dldBtn = `<button class="btn btn-primary" style="padding:4px 10px;font-size:12px" onclick="downloadBackup('${b.filename}','${b.source}')">下载</button>`;
+    const delBtn = `<button class="btn btn-danger btn-sm" onclick="deleteBackup('${b.filename}','${b.source}')">删除</button>`;
+    const dldBtn = `<button class="btn btn-primary btn-sm" onclick="downloadBackup('${b.filename}','${b.source}')">下载</button>`;
     return `<tr><td>${b.filename}</td><td>${(b.size_mb||0).toFixed(2)} MB</td><td>${b.time_str||"-"}</td><td>${b.source}</td><td>${dldBtn} ${delBtn}</td></tr>`;
   }).join("");
   sel.innerHTML = list.map(b=>`<option value="${b.filename}" data-source="${b.source}">${b.filename} (${b.source})</option>`).join("");
@@ -800,11 +851,18 @@ async function testNotification() {
 // Init
 async function init() {
   await Promise.all([loadDashboard(), loadStatus(), loadConfig(), refreshBackups(), refreshHistory(), refreshRestoreHistory()]);
+  // Auto-refresh dashboard every 10s
+  setInterval(()=>{loadDashboard();loadStatus();}, 10000);
+  // If starting on status tab, start auto-refresh
+  const activeTab = document.querySelector(".tab.active");
+  if (activeTab && activeTab.dataset.tab === 'status') {
+    refreshSystemInfo();
+    refreshInterface();
+    if (statusRefreshTimer) clearInterval(statusRefreshTimer);
+    statusRefreshTimer = setInterval(() => { refreshSystemInfo(); refreshInterface(); }, 15000);
+  }
 }
 checkAuth();
-
-// Auto refresh
-setInterval(()=>{loadDashboard();loadStatus();}, 10000);
 </script>
 <!-- Change password modal -->
 <div class="modal-overlay" id="changePwdModal">
@@ -814,7 +872,7 @@ setInterval(()=>{loadDashboard();loadStatus();}, 10000);
     <div class="form-group"><label>新密码</label><input id="newPwd" type="password" placeholder="至少4个字符"></div>
     <div class="form-group"><label>确认新密码</label><input id="confirmPwd" type="password" placeholder="再次输入新密码"></div>
     <div id="changePwdError" style="color:#e74c3c;font-size:13px;margin-bottom:12px;display:none"></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+    <div class="flex" style="justify-content:flex-end;margin-top:16px;gap:8px">
       <button class="btn btn-secondary" onclick="closeChangePassword()">取消</button>
       <button class="btn btn-primary" id="changePwdBtn" onclick="doChangePassword()">确认修改</button>
     </div>
