@@ -38,6 +38,14 @@ CHANNEL_DESCRIPTIONS = {
             "key": {"label": "SendKey", "type": "text", "placeholder": "SCTxxx..."},
         },
     },
+    "gotify": {
+        "label": "Gotify (自托管推送)",
+        "desc": "Gotify自托管消息推送，支持Android/Web端，需自建服务端",
+        "fields": {
+            "server": {"label": "服务器地址", "type": "text", "placeholder": "http://192.168.9.105:8080"},
+            "token": {"label": "App Token", "type": "text", "placeholder": "Axxxxxxxxx.xxxx"},
+        },
+    },
 }
 
 
@@ -47,6 +55,7 @@ def get_default_notify_channels() -> dict:
         "bark": {"enabled": False, "key": "", "server": "https://api.day.app"},
         "pushdeer": {"enabled": False, "key": "", "server": "https://api2.pushdeer.com"},
         "serverchan": {"enabled": False, "key": ""},
+        "gotify": {"enabled": False, "server": "http://192.168.9.105:8080", "token": ""},
     }
 
 
@@ -108,6 +117,17 @@ class NotificationHandler:
             return
         data = f"title={quote(title)}&desp={quote(text)}".encode("utf-8")
         req = Request(f"https://sctapi.ftqq.com/{key}.send", data=data)
+        urlopen(req, timeout=10)
+
+    @staticmethod
+    def _send_gotify(title: str, text: str, conf: dict):
+        server = conf.get("server", "").strip().rstrip("/")
+        token = conf.get("token", "").strip()
+        if not server or not token:
+            return
+        payload = json.dumps({"title": title, "message": text, "priority": 5}).encode("utf-8")
+        req = Request(f"{server}/message?token={token}", data=payload,
+                      headers={"Content-Type": "application/json"})
         urlopen(req, timeout=10)
 
     def send_backup_notification(

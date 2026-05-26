@@ -225,6 +225,19 @@ tr:hover{background:#f5f8ff}
       <p style="color:#999;font-size:12px;margin-top:-8px;margin-bottom:12px">📌 Server酱·Turbo版，推送通知到微信，https://sct.ftqq.com 注册获取 SendKey</p>
     </div>
 
+    <div class="toggle-header" onclick="if(event.target.tagName!=='INPUT')toggleSection('ik-notifyGotify')">
+      <span class="arrow">▶</span>
+      <label class="flex" style="cursor:pointer;gap:8px;flex:1">
+        <input type="checkbox" id="ch_gotify_enabled" onclick="event.stopPropagation()">
+        Gotify (自托管推送)
+      </label>
+    </div>
+    <div id="ik-notifyGotify" class="toggle-body" style="display:none">
+      <div class="form-group"><label>服务器地址</label><input id="ch_gotify_server" placeholder="http://192.168.9.105:8080" value="http://192.168.9.105:8080"></div>
+      <div class="form-group"><label>App Token</label><input id="ch_gotify_token" placeholder="Axxxxxxxxx.xxxx"></div>
+      <p style="color:#999;font-size:12px;margin-top:-8px;margin-bottom:12px">📌 Gotify是开源自托管消息推送服务，支持Android/Web端。在Gotify中创建应用获取App Token</p>
+    </div>
+
     <button class="btn btn-primary btn-sm mt-12" onclick="testNotification()">📤 测试通知</button>
   </div>
   <div class="card">
@@ -481,6 +494,9 @@ async function loadConfig() {
   document.getElementById("ch_pushdeer_server").value = (nc.pushdeer && nc.pushdeer.server) || "https://api2.pushdeer.com";
   document.getElementById("ch_serverchan_enabled").checked = !!(nc.serverchan && nc.serverchan.enabled);
   document.getElementById("ch_serverchan_key").value = (nc.serverchan && nc.serverchan.key) || "";
+  document.getElementById("ch_gotify_enabled").checked = !!(nc.gotify && nc.gotify.enabled);
+  document.getElementById("ch_gotify_server").value = (nc.gotify && nc.gotify.server) || "http://192.168.9.105:8080";
+  document.getElementById("ch_gotify_token").value = (nc.gotify && nc.gotify.token) || "";
   toggleNotifyChannels();
   document.getElementById("cfg-enable_restore").checked = !!c.enable_restore;
   document.getElementById("cfg-restore_force").checked = !!c.restore_force;
@@ -515,6 +531,7 @@ async function saveConfig() {
       bark: { enabled: document.getElementById("ch_bark_enabled").checked, key: document.getElementById("ch_bark_key").value, server: document.getElementById("ch_bark_server").value || "https://api.day.app" },
       pushdeer: { enabled: document.getElementById("ch_pushdeer_enabled").checked, key: document.getElementById("ch_pushdeer_key").value, server: document.getElementById("ch_pushdeer_server").value || "https://api2.pushdeer.com" },
       serverchan: { enabled: document.getElementById("ch_serverchan_enabled").checked, key: document.getElementById("ch_serverchan_key").value },
+      gotify: { enabled: document.getElementById("ch_gotify_enabled").checked, server: document.getElementById("ch_gotify_server").value || "http://192.168.9.105:8080", token: document.getElementById("ch_gotify_token").value },
     },
     enable_local_backup: document.getElementById("cfg-enable_local_backup").checked,
     enable_restore: document.getElementById("cfg-enable_restore").checked,
@@ -755,7 +772,7 @@ async function testNotification() {
       var lines = [];
       for (var ch in res.results) {
         var r = res.results[ch];
-        var label = {webhook: "Webhook", bark: "Bark", pushdeer: "PushDeer", serverchan: "Server酱"}[ch] || ch;
+        var label = {webhook: "Webhook", bark: "Bark", pushdeer: "PushDeer", serverchan: "Server酱", gotify: "Gotify"}[ch] || ch;
         if (r.sent) lines.push("✅ " + label + ": 发送成功");
         else if (r.error === "未启用") lines.push("⏭️ " + label + ": 未启用");
         else lines.push("❌ " + label + ": " + (r.error || "发送失败"));
