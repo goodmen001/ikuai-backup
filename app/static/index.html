@@ -233,7 +233,7 @@ tr:hover{background:#f5f8ff}
       </label>
     </div>
     <div id="ik-notifyGotify" class="toggle-body" style="display:none">
-      <div class="form-group"><label>服务器地址</label><input id="ch_gotify_server" placeholder="http://192.168.9.105:8080" value="http://192.168.9.105:8080"></div>
+      <div class="form-group"><label>服务器地址</label><input id="ch_gotify_server" placeholder="http://your-gotify-server:8080"></div>
       <div class="form-group"><label>App Token</label><input id="ch_gotify_token" placeholder="Axxxxxxxxx.xxxx"></div>
       <p style="color:#999;font-size:12px;margin-top:-8px;margin-bottom:12px">📌 Gotify是开源自托管消息推送服务，支持Android/Web端。在Gotify中创建应用获取App Token</p>
     </div>
@@ -495,7 +495,7 @@ async function loadConfig() {
   document.getElementById("ch_serverchan_enabled").checked = !!(nc.serverchan && nc.serverchan.enabled);
   document.getElementById("ch_serverchan_key").value = (nc.serverchan && nc.serverchan.key) || "";
   document.getElementById("ch_gotify_enabled").checked = !!(nc.gotify && nc.gotify.enabled);
-  document.getElementById("ch_gotify_server").value = (nc.gotify && nc.gotify.server) || "http://192.168.9.105:8080";
+  document.getElementById("ch_gotify_server").value = (nc.gotify && nc.gotify.server) || "";
   document.getElementById("ch_gotify_token").value = (nc.gotify && nc.gotify.token) || "";
   toggleNotifyChannels();
   document.getElementById("cfg-enable_restore").checked = !!c.enable_restore;
@@ -531,7 +531,7 @@ async function saveConfig() {
       bark: { enabled: document.getElementById("ch_bark_enabled").checked, key: document.getElementById("ch_bark_key").value, server: document.getElementById("ch_bark_server").value || "https://api.day.app" },
       pushdeer: { enabled: document.getElementById("ch_pushdeer_enabled").checked, key: document.getElementById("ch_pushdeer_key").value, server: document.getElementById("ch_pushdeer_server").value || "https://api2.pushdeer.com" },
       serverchan: { enabled: document.getElementById("ch_serverchan_enabled").checked, key: document.getElementById("ch_serverchan_key").value },
-      gotify: { enabled: document.getElementById("ch_gotify_enabled").checked, server: document.getElementById("ch_gotify_server").value || "http://192.168.9.105:8080", token: document.getElementById("ch_gotify_token").value },
+      gotify: { enabled: document.getElementById("ch_gotify_enabled").checked, server: document.getElementById("ch_gotify_server").value, token: document.getElementById("ch_gotify_token").value },
     },
     enable_local_backup: document.getElementById("cfg-enable_local_backup").checked,
     enable_restore: document.getElementById("cfg-enable_restore").checked,

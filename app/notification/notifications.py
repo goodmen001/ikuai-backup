@@ -55,7 +55,7 @@ def get_default_notify_channels() -> dict:
         "bark": {"enabled": False, "key": "", "server": "https://api.day.app"},
         "pushdeer": {"enabled": False, "key": "", "server": "https://api2.pushdeer.com"},
         "serverchan": {"enabled": False, "key": ""},
-        "gotify": {"enabled": False, "server": "http://192.168.9.105:8080", "token": ""},
+        "gotify": {"enabled": False, "server": "", "token": ""},
     }
 
 
